@@ -9,7 +9,7 @@ def get_dataloaders(config):
     batch_size = config['dataloader']['batch_size']
     num_workers = config['dataloader']['num_workers']
 
-    transform = transforms.Compose([transforms.toTensor()])
+    transform = transforms.Compose([transforms.ToTensor()])
 
     train_dataset = torchvision.datasets.CIFAR10(root = root, train = True, download = True, transform = transform)
     test_dataset = torchvision.datasets.CIFAR10(root = root, train = False, download = True, transform = transform)
