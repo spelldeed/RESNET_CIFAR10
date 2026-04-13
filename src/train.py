@@ -1,9 +1,9 @@
 import argparse
 import torch
 
-from src.utils import load_config, set_seed  
-from src.data import get_dataloaders
-from src.model import get_model
+from utils import load_config, set_seed  
+from data import get_dataloaders
+from model import get_model
 
 
 
