@@ -11,7 +11,10 @@ def main(config_path):
     config = load_config(config_path)
 
     set_seed(config["seed"])
-    device = torch.device(config["device"])
+    # device = torch.device(config["device"])
+    device = torch.device(
+    "cuda" if torch.cuda.is_available() else "cpu"
+)
     train_loader, test_loader = get_dataloaders(config)
     model = get_model(config).to(device)
 
@@ -23,6 +26,7 @@ def main(config_path):
 
     outputs =  model(images)
     print(f"Output batch shape: {outputs.shape}")
+    
 
 
 
