@@ -1,8 +1,9 @@
 import argparse
 import torch
 import torch.nn as nn
+import os
 
-from utils import load_config, set_seed  
+from utils import load_config, set_seed , create_run_dir, save_config, log_metrics, save_model 
 from data import get_dataloaders
 from model import get_model
 from engine import train_one_epoch, evaluate
@@ -11,6 +12,8 @@ from engine import train_one_epoch, evaluate
 
 def main(config_path):
     config = load_config(config_path)
+    run_dir = create_run_dir(config)
+    save_config(config, run_dir)
 
     set_seed(config["seed"])
     # device = torch.device(config["device"])
@@ -19,6 +22,8 @@ def main(config_path):
 )
     train_loader, test_loader = get_dataloaders(config)
     model = get_model(config).to(device)
+
+    best_acc = 0 
 
     # images, labels = next(iter(train_loader))
     # images, labels = images.to(device), labels.to(device)
@@ -41,10 +46,18 @@ def main(config_path):
             model, test_loader, criterion, device
         )
 
-        print(f"Epoch {epoch+1}")
-        print(f"Train Loss: {train_loss:.4f}, Train Acc: {train_acc:.4f}")
-        print(f"Test Loss: {test_loss:.4f}, Test Acc: {test_acc:.4f}")
-        print("-"*40)
+        # print(f"Epoch {epoch+1}")
+        # print(f"Train Loss: {train_loss:.4f}, Train Acc: {train_acc:.4f}")
+        # print(f"Test Loss: {test_loss:.4f}, Test Acc: {test_acc:.4f}")
+        # print("-"*40)
+        log_metrics(run_dir, epoch, train_loss, train_acc, test_loss, test_acc)
+        save_model(model, os.path.join(run_dir, "model_last.pth"))
+
+        if test_acc > best_acc:
+            best_acc = test_acc
+            save_model(model, os.path.join(run_dir, "model_best.pth"))
+
+
 
 
 

@@ -47,9 +47,10 @@ class BasicBlock(nn.Module):
         self.conv2 = nn.Conv2d(out_channels,out_channels, 3,1, 1,bias=False)
         self.bn2 = nn.BatchNorm2d(out_channels)
 
-        self.shortcut = nn.Sequential()  # the addition Block
+        self.shortcut = nn.Sequential()  
 
-        if stride != 1 or in_channels != out_channels:
+        if stride != 1 or in_channels != out_channels: # addition identity block special case when sizes  are different, and will cause problem during addition. 
+            # Keeping kernel and 2*padding difference = 1 so that I do not need to check shape because of them 
             self.shortcut = nn.Sequential(
                 nn.Conv2d(in_channels, out_channels, 1, stride, bias=False),
                 nn.BatchNorm2d(out_channels)
@@ -58,7 +59,7 @@ class BasicBlock(nn.Module):
     def forward(self, x):
         out = F.relu(self.bn1(self.conv1(x)))
         out = self.bn2(self.conv2(out))
-        out+= self.shortcut(x)
+        out+= self.shortcut(x) # alwys added 
         out = F.relu(out)
         return out
         

@@ -1,6 +1,5 @@
-experiment_name : baseline
-seed : 50
-device : cpu
+exp_name: baseline
+seed: 42
 
 dataset:
   name: cifar10
@@ -12,8 +11,22 @@ dataloader:
   num_workers: 2
 
 model:
-  name: vanilla_cnn
+  name: resnet18
   num_classes: 10
 
-debug:
-  small_subset: true
+# training:
+#   epochs: 10
+#   device: auto  
+
+# optimizer:
+#   name: sgd
+#   lr: 0.01
+#   momentum: 0.9
+#   weight_decay: 0.0005
+
+scheduler:
+  name: none
+
+# logging:
+#   save_best: true
+#   save_last: true
