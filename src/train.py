@@ -14,6 +14,7 @@ def main(config_path):
     config = load_config(config_path)
     run_dir = create_run_dir(config)
     save_config(config, run_dir)
+    print("Saved Config")
 
     set_seed(config["seed"])
     # device = torch.device(config["device"])
@@ -38,6 +39,7 @@ def main(config_path):
     optimizer = torch.optim.SGD(model.parameters(), lr=0.01, momentum=0.9)
     epochs = 2
     for epoch in range(epochs):
+        print(f"Starting epoch : {epoch}")
         train_loss, train_acc = train_one_epoch(
             model, train_loader, criterion, optimizer, device
         )
@@ -50,9 +52,14 @@ def main(config_path):
         # print(f"Train Loss: {train_loss:.4f}, Train Acc: {train_acc:.4f}")
         # print(f"Test Loss: {test_loss:.4f}, Test Acc: {test_acc:.4f}")
         # print("-"*40)
-        log_metrics(run_dir, epoch, train_loss, train_acc, test_loss, test_acc)
+        print(f"About to start logging in metrics for epoch : {epoch}")
+        log_metrics(run_dir, epoch+1, train_loss, train_acc, test_loss, test_acc)
+        print(f"Done, Saving model state as of epoch : {epoch}")
         save_model(model, os.path.join(run_dir, "model_last.pth"))
+        print(f"Saved Model State : {epoch}")
 
+
+        print(f"Test acc > best acc ? {test_acc > best_acc}" )
         if test_acc > best_acc:
             best_acc = test_acc
             save_model(model, os.path.join(run_dir, "model_best.pth"))

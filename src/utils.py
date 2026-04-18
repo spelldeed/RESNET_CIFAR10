@@ -34,7 +34,7 @@ def save_config(config, run_dir):
 
 
 def log_metrics(run_dir, epoch, train_loss, train_acc, test_loss, test_acc):
-    file_path = os.path.joins(run_dir, "metrics.csv")
+    file_path = os.path.join(run_dir, "metrics.csv")
     file_exists = os.path.isfile(file_path)
 
     with open(file_path, "a", newline="") as f:
