@@ -7,26 +7,29 @@ dataset:
   num_classes: 10
 
 dataloader:
-  batch_size: 64
+  batch_size: 128
   num_workers: 2
 
 model:
   name: resnet18
   num_classes: 10
 
-# training:
-#   epochs: 10
-#   device: auto  
+training:
+  epochs: 200
+  device: auto
 
-# optimizer:
-#   name: sgd
-#   lr: 0.01
-#   momentum: 0.9
-#   weight_decay: 0.0005
+optimizer:
+  name: sgd
+  lr: 0.1
+  momentum: 0.9
+  weight_decay: 0.0001
 
 scheduler:
-  name: none
+  name: cosine
 
-# logging:
-#   save_best: true
-#   save_last: true
+logging:
+  save_best: true
+  save_last: true
+
+# debug:
+#   small_subset: true
