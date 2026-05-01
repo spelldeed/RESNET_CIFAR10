@@ -15,7 +15,7 @@ model:
   num_classes: 10
 
 training:
-  epochs: 200
+  epochs: 20
   device: auto
 
 optimizer:
