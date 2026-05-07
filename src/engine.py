@@ -1,33 +1,28 @@
-import torch
-from tqdm import tqdm
+import torch 
 
-
-def train_one_epoch(model, loader, criterion, optimizer, device, epoch, total_epochs):
+def train_one_epoch(model, loader, criterion, optimizer, device):
     model.train()
 
-    total_loss = 0
-    correct = 0
-    total = 0
 
-    pbar = tqdm(loader, desc=f"Epoch {epoch}/{total_epochs}", leave=False)
+    total_loss = 0 
+    correct = 0 
+    total = 0 
 
-    for images, labels in pbar:
+    for images, labels in loader:
         images, labels = images.to(device), labels.to(device)
 
-        optimizer.zero_grad()
         outputs = model(images)
         loss = criterion(outputs, labels)
+        optimizer.zero_grad()
         loss.backward()
         optimizer.step()
 
         total_loss += loss.item()
         preds = outputs.argmax(dim=1)
-        correct += (preds == labels).sum().item()
+        correct += (preds==labels).sum().item()
         total += labels.size(0)
-
-        pbar.set_postfix(loss=f"{loss.item():.4f}", acc=f"{correct/total:.4f}")
-
-    return total_loss / len(loader), correct / total
+    
+    return total_loss / len(loader), correct/total
 
 
 def evaluate(model, loader, criterion, device):
@@ -45,6 +40,7 @@ def evaluate(model, loader, criterion, device):
             loss = criterion(outputs, labels)
 
             total_loss += loss.item()
+
             preds = outputs.argmax(dim=1)
             correct += (preds == labels).sum().item()
             total += labels.size(0)
